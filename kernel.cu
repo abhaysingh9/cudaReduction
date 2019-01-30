@@ -31,7 +31,7 @@ __global__ void reduction(float *out, float *in, unsigned size)
        //partialSum[blockDim.x + t] = 0.0;
     }
     
-    if(t+blockDim.x+start<=size){
+    if(t+blockDim.x+start<size){
          partialSum[blockDim.x+t] = in [start + blockDim.x+t];
     }else{
          partialSum[blockDim.x + t] = 0.0;
@@ -44,7 +44,7 @@ __global__ void reduction(float *out, float *in, unsigned size)
         if(t % stride == 0)
             partialSum[2*t] += partialSum[2*t+stride];
     }
-   
+    __syncthreads();   
     out[blockIdx.x] =  partialSum[0];
   
  }
